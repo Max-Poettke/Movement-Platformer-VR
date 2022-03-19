@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class PhysicsHand : MonoBehaviour
 {
@@ -23,14 +24,19 @@ public class PhysicsHand : MonoBehaviour
     Vector3 previousPosition;
     Rigidbody rb;
     bool isColliding;
+    XRController xr;
+    
 
     void Start()
     {
         transform.position = target.position;
         transform.rotation = target.rotation;
+        
         rb = GetComponent<Rigidbody>();
         rb.maxAngularVelocity = float.PositiveInfinity; 
         previousPosition = transform.position;
+        
+        xr = (XRController) GameObject.FindObjectOfType(typeof(XRController));
     }
 
     void FixedUpdate()
@@ -103,6 +109,9 @@ public class PhysicsHand : MonoBehaviour
 
         touchAudio.transform.position = transform.position;
         touchAudio.Play();
+
+        // haptic feedback using vibration
+        xr.SendHapticImpulse(0.7f, 0.2f);
 
         pSystem.transform.position = transform.position;
         pSystem.Play();
